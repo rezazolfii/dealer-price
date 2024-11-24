@@ -137,22 +137,5 @@ if st.session_state.logged_in:
                 st.warning("No products found for the specified model.")
         else:
             st.warning("Please enter a model to search.")
-def get_all_users():
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-    c.execute('SELECT username FROM users')
-    users = c.fetchall()  # Fetch all user records
-    conn.close()
-    return users
-if st.session_state.logged_in:
-    st.header("User  List")
-    # Assuming you have a way to check if the user is an admin
-    if username == "rezazo":  # Replace with your admin check logic
-        users = get_all_users()
-        st.write("### Registered Users:")
-        if users:
-            st.dataframe(pd.DataFrame(users, columns=["Username"]))
-        else:
-            st.write("No users found.")
-    else:
+
         st.warning("You do not have permission to view the user list.")
