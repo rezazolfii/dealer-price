@@ -137,5 +137,3 @@ if st.session_state.logged_in:
                 st.warning("No products found for the specified model.")
         else:
             st.warning("Please enter a model to search.")
-
-        st.warning("You do not have permission to view the user list.")
