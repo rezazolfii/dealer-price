@@ -45,6 +45,48 @@ def verify_user(username, password):
     conn.close()
     return user is not None
 
+# Create the user table at the start of the app
+create_user_table()
+
+# Streamlit app layout
+st.title("Dealer Price Lookup")
+
+# Session state to keep track of logged-in user
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
+# Login page
+if not st.session_state.logged_in:
+    st.header("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type='password')
+
+    if st.button("Login"):
+        if verify_user(username, password):
+            st.session_state.logged_in = True  # Set logged-in state
+            st.success("Logged in successfully!")
+        else:
+            st.error("Invalid username or password")
+
+    # Button to show the sign-up section
+    if st.button("Create an Account"):
+        st.session_state.show_signup = True
+
+    # Sign-Up Section
+    if 'show_signup' not in st.session_state:
+        st.session_state.show_signup = False
+
+    if st.session_state.show_signup:
+        st.header("Sign Up")
+        new_username = st.text_input("New Username")
+        new_password = st.text_input("New Password", type='password')
+
+        if st.button("Sign Up"):
+            if new_username and new_password:
+                create_user(new_username, new_password)
+                st.session_state.show_signup = False  # Hide sign-up section after successful sign-up
+            else:
+                st.warning("Please enter a username and password.")
 # Load the Excel file
 @st.cache_data
 def load_data():
@@ -77,42 +119,8 @@ def get_unique_products(model, data):
 
     return pd.DataFrame()  # Return an empty DataFrame if no matches found
 
-# Create the user table at the start of the app
-create_user_table()
-
 # Load data
 data = load_data()
-
-# Streamlit app layout
-st.title("Dealer Price Lookup")
-
-# Session state to keep track of logged-in user
-if 'logged_in' not in st.session_state:
-    st.session_state.logged_in = False
-
-# Login and Sign-Up page
-if not st.session_state.logged_in:
-    st.header("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
-
-    if st.button("Login"):
-        if verify_user(username, password):
-            st.session_state.logged_in = True  # Set logged-in state
-            st.success("Logged in successfully!")
-        else:
-            st.error("Invalid username or password")
-
-    # Sign-Up Section
-    st.header("Sign Up")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type='password')
-
-    if st.button("Sign Up"):
-        if new_username and new_password:
-            create_user(new_username, new_password)
-        else:
-            st.warning("Please enter a username and password.")
 
 # Search page
 if st.session_state.logged_in:
@@ -123,10 +131,9 @@ if st.session_state.logged_in:
         if search_model:  # Check if the search model is not empty
             unique_products = get_unique_products(search_model, data)
             if not unique_products.empty:
-                st.write("### Matching Products:")
-                # Display the unique products in a DataFrame
-                st.dataframe(unique_products[['product_complete_name', 'brand', 'cat', 'price', 'dealer_id']])
+                st.write("### Unique Products Found:")
+                st.dataframe(unique_products)  # Display the unique products
             else:
-                st.write("No products found matching this model.")
+                st.warning("No products found for the specified model.")
         else:
-            st.warning("Please enter valid product model")
+            st.warning("Please enter a model to search.")
