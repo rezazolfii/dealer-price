@@ -101,7 +101,16 @@ def load_data():
 # Function to get unique products based on the model
 def get_unique_products(model, data):
     # Filter data based on the model
-    filtered_data = data[data['product_complete_name'].str.contains(model, case=False, na=False)]
+    words = [x for x in model.split() if x.isalpha()]
+    numbers = [x for x in model.split() if x.isdigit()]
+
+  # Filter the DataFrame based on the words and numbers
+    filtered_data = data[data['product_complete_name'].str.contains(' '.join(words))]
+    for number in numbers:
+       filtered_data = filtered_data[filtered_data['product_complete_name'].str.contains(number)]
+
+    # filtered_data
+    # filtered_data = data[data['product_complete_name'].str.contains(model, case=False, na=False)]
 
     if not filtered_data.empty:
         # Group by 'brand' and 'cat' to find the minimum price
