@@ -140,7 +140,8 @@ if st.session_state.logged_in:
         if search_model:  # Check if the search model is not empty
             unique_products = get_unique_products(search_model, data)
             if not unique_products.empty:
-                st.write("### Unique Products Found:")
+                st.write("### Best price Products Found:")
+                unique_products['Quantity'] = ''
                 st.dataframe(unique_products)  # Display the unique products
             else:
                 st.warning("No products found for the specified model.")
