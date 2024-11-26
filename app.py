@@ -68,7 +68,7 @@ if not st.session_state.logged_in:
         else:
             st.error("Invalid username or password")
 
-    # Button to show the sign-up section
+    st.markdown("Not signed up yet? Create an account")
     if st.button("Create an Account"):
         st.session_state.show_signup = True
 
