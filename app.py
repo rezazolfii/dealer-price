@@ -45,6 +45,15 @@ def verify_user(username, password):
     conn.close()
     return user is not None
 
+# Function to get all users from the database
+def get_all_users():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM users')
+    users = c.fetchall()  # Fetch all users
+    conn.close()
+    return users
+
 # Create the user table at the start of the app
 create_user_table()
 
@@ -87,6 +96,7 @@ if not st.session_state.logged_in:
                 st.session_state.show_signup = False  # Hide sign-up section after successful sign-up
             else:
                 st.warning("Please enter a username and password.")
+
 # Load the Excel file
 @st.cache_data
 def load_data():
@@ -101,16 +111,10 @@ def load_data():
 # Function to get unique products based on the model
 def get_unique_products(model, data):
     # Filter data based on the model
-    words = [x for x in model.split() ]
-    # numbers = [x for x in model.split() if x.isdigit()]
+    words = [x for x in model.split()]
 
-  # Filter the DataFrame based on the words and numbers
-    # filtered_data = data[data['product_complete_name'].str.contains(' '.join(words))]
-    for word in words:
-       filtered_data = data[data['product_complete_name'].str.contains(word, case=False)]
-
-    # filtered_data
-    # filtered_data = data[data['product_complete_name'].str.contains(model, case=False, na=False)]
+    # Filter the DataFrame based on the words
+    filtered_data = data[data['product_complete_name'].str.contains('|'.join(words), case=False, na=False)]
 
     if not filtered_data.empty:
         # Group by 'brand' and 'cat' to find the minimum price
@@ -123,10 +127,7 @@ def get_unique_products(model, data):
 
         # Drop the 'min_price' column as it's no longer needed
         unique_products.drop(columns=['min_price'], inplace=True)
-
         return unique_products
-
-    return pd.DataFrame()  # Return an empty DataFrame if no matches found
 
 # Load data
 data = load_data()
@@ -147,4 +148,14 @@ if st.session_state.logged_in:
                 st.warning("No products found for the specified model.")
         else:
             st.warning("Please enter a model to search.")
-# update price 5 azar
+
+    # Display all users
+    st.header("User List")
+    users = get_all_users()
+
+    if users:
+        # Convert users to a DataFrame for better display
+        users_df = pd.DataFrame(users, columns=['ID', 'Username', 'Password'])
+        st.dataframe(users_df)  # Display the users in a table
+    else:
+        st.warning("No users found.")
