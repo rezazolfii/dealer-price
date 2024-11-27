@@ -155,7 +155,7 @@ if st.session_state.logged_in:
 
     # if users:
     #     # Convert users to a DataFrame for better display
-    #     users_df = pd.DataFrame(users, columns=[ 'Username', 'Password'])
+    #     users_df = pd.DataFrame(users, columns=[ 'id', 'Username', 'Password'])
     #     st.dataframe(users_df)  # Display the users in a table
     # else:
     #     st.warning("No users found.")
