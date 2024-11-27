@@ -149,13 +149,13 @@ if st.session_state.logged_in:
         else:
             st.warning("Please enter a model to search.")
 
-    # Display all users
-    st.header("User List")
-    users = get_all_users()
+    # # Display all users
+    # st.header("User List")
+    # users = get_all_users()
 
-    if users:
-        # Convert users to a DataFrame for better display
-        users_df = pd.DataFrame(users, columns=['ID', 'Username', 'Password'])
-        st.dataframe(users_df)  # Display the users in a table
-    else:
-        st.warning("No users found.")
+    # if users:
+    #     # Convert users to a DataFrame for better display
+    #     users_df = pd.DataFrame(users, columns=[ 'Username', 'Password'])
+    #     st.dataframe(users_df)  # Display the users in a table
+    # else:
+    #     st.warning("No users found.")
