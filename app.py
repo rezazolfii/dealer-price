@@ -116,7 +116,9 @@ def get_unique_products(model, data):
     # Filter the DataFrame based on the words
     filtered_data = data[data['product_complete_name'].str.contains('|'.join(words), case=False, na=False)]
 
-    if not filtered_data.empty:
+    if  filtered_data.empty:
+        return pd.DataFrame()
+    else :
         # Group by 'brand' and 'cat' to find the minimum price
         min_prices = filtered_data.groupby(['brand', 'cat'])['price'].min().reset_index()
         min_prices.rename(columns={'price': 'min_price'}, inplace=True)
@@ -140,7 +142,7 @@ if st.session_state.logged_in:
     if st.button("Search"):
         if search_model:  # Check if the search model is not empty
             unique_products = get_unique_products(search_model, data)
-            if not unique_products.empty:
+            if unique_products is not None and not unique_products.empty:
                 st.write("### Best price Products Found:")
                 unique_products['Quantity'] = ''
                 st.dataframe(unique_products)  # Display the unique products
