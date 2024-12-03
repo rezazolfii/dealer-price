@@ -117,7 +117,7 @@ def get_unique_products(model, data):
     filtered_data = data[data['product_complete_name'].str.contains('|'.join(words), case=False, na=False)]
 
     if  filtered_data.empty:
-        return pd.DataFrame()
+        return pd.DataFrame() # add this to return empty dataframe
     else :
         # Group by 'brand' and 'cat' to find the minimum price
         min_prices = filtered_data.groupby(['brand', 'cat'])['price'].min().reset_index()
@@ -151,13 +151,13 @@ if st.session_state.logged_in:
         else:
             st.warning("Please enter a model to search.")
 
-    # # Display all users
-    # st.header("User List")
-    # users = get_all_users()
+    # Display all users
+    st.header("User List")
+    users = get_all_users()
 
-    # if users:
-    #     # Convert users to a DataFrame for better display
-    #     users_df = pd.DataFrame(users, columns=[ 'id', 'Username', 'Password'])
-    #     st.dataframe(users_df)  # Display the users in a table
-    # else:
-    #     st.warning("No users found.")
+    if users:
+        # Convert users to a DataFrame for better display
+        users_df = pd.DataFrame(users, columns=[ 'id', 'Username', 'Password'])
+        st.dataframe(users_df)  # Display the users in a table
+    else:
+        st.warning("No users found.")
