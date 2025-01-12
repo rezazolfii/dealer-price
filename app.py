@@ -122,7 +122,7 @@ def get_unique_products(model, data):
         # Group by 'brand' and 'cat' to find the minimum price
         min_prices = filtered_data.groupby(['brand', 'cat'])['price'].min().reset_index()
         min_prices.rename(columns={'price': 'min_price'}, inplace=True)
-        min_prices['min_price'] = min_prices['min_price'] * 1.01
+        # min_prices['min_price'] = min_prices['min_price'] * 1.01
 
         # Merge to keep only those products that have the minimum price
         unique_products = filtered_data.merge(min_prices, on=['brand', 'cat'])
