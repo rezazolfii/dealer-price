@@ -130,6 +130,7 @@ def get_unique_products(model, data):
 
         # Drop the 'min_price' column as it's no longer needed
         unique_products.drop(columns=['min_price'], inplace=True)
+        unique_products['price'] = unique_products['price']*1.01
         return unique_products
 
 # Load data
