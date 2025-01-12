@@ -122,6 +122,7 @@ def get_unique_products(model, data):
         # Group by 'brand' and 'cat' to find the minimum price
         min_prices = filtered_data.groupby(['brand', 'cat'])['price'].min().reset_index()
         min_prices.rename(columns={'price': 'min_price'}, inplace=True)
+        min_prices['min_price'] = min_prices['min_price'] * 1.01
 
         # Merge to keep only those products that have the minimum price
         unique_products = filtered_data.merge(min_prices, on=['brand', 'cat'])
@@ -152,12 +153,12 @@ if st.session_state.logged_in:
             st.warning("Please enter a model to search.")
 
     # Display all users
-    # st.header("User List")
-    # users = get_all_users()
+    st.header("User List")
+    users = get_all_users()
 
-    # if users:
-    #     # Convert users to a DataFrame for better display
-    #     users_df = pd.DataFrame(users, columns=[ 'id', 'Username', 'Password'])
-    #     st.dataframe(users_df)  # Display the users in a table
-    # else:
-    #     st.warning("No users found.")
+    if users:
+        # Convert users to a DataFrame for better display
+        users_df = pd.DataFrame(users, columns=[ 'id', 'Username', 'Password'])
+        st.dataframe(users_df)  # Display the users in a table
+    else:
+        st.warning("No users found.")
